@@ -6,11 +6,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 declare const __DEV__: boolean;
 
 const API_CONFIG = {
-  BASE_URL: __DEV__
-    ? Platform.OS === 'android'
-      ? 'http://10.0.2.2:5000/api/v1'
-      : 'http://localhost:5000/api/v1'
-    : 'https://your-production-api.com/api/v1',
+  // Use Render Backend for both Dev and Prod (so you can test on mobile easily)
+  BASE_URL: 'https://reveda-backend.onrender.com/api/v1',
+
+  // Keep this for reference if you want to switch back to local:
+  // BASE_URL: __DEV__
+  //   ? Platform.OS === 'android'
+  //     ? 'http://10.0.2.2:5000/api/v1'
+  //     : 'http://localhost:5000/api/v1'
+  //   : 'https://reveda-backend.onrender.com/api/v1',
   TIMEOUT: 10000,
 };
 

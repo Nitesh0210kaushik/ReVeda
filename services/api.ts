@@ -6,15 +6,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 declare const __DEV__: boolean;
 
 const API_CONFIG = {
-  // Use Render Backend for both Dev and Prod (so you can test on mobile easily)
-  BASE_URL: 'https://reveda-backend.onrender.com/api/v1',
-
-  // Keep this for reference if you want to switch back to local:
-  // BASE_URL: __DEV__
-  //   ? Platform.OS === 'android'
-  //     ? 'http://10.0.2.2:5000/api/v1'
-  //     : 'http://localhost:5000/api/v1'
-  //   : 'https://reveda-backend.onrender.com/api/v1',
+  BASE_URL: __DEV__
+    ? Platform.OS === 'android'
+      ? 'http://10.0.2.2:5000/api/v1' // For Android Emulator
+      : 'http://localhost:5000/api/v1' // For iOS Simulator and Web
+    : 'https://reveda-backend.onrender.com/api/v1',
   TIMEOUT: 10000,
 };
 
@@ -205,6 +201,19 @@ class ApiService {
   async verifyOTP(data: VerifyOTPData): Promise<ApiResponse<{ user: User; tokens: AuthTokens }>> {
     const response: AxiosResponse<ApiResponse<{ user: User; tokens: AuthTokens }>> =
       await this.api.post('/auth/verify-otp', data);
+
+    if (response.data?.success && response.data?.data) {
+      const { user, tokens } = response.data.data;
+      await this.storeTokens(tokens);
+      await this.storeUser(user);
+    }
+
+    return response.data || { success: false, message: 'No response data' };
+  }
+
+  async loginWithGoogle(idToken: string): Promise<ApiResponse<{ user: User; tokens: AuthTokens }>> {
+    const response: AxiosResponse<ApiResponse<{ user: User; tokens: AuthTokens }>> =
+      await this.api.post('/auth/google-login', { idToken });
 
     if (response.data?.success && response.data?.data) {
       const { user, tokens } = response.data.data;

@@ -242,8 +242,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 24,
-    paddingVertical: 10,
-    justifyContent: 'center',
+    paddingVertical: 40,
   },
   contentWrapper: {
     width: '100%',

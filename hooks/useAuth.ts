@@ -27,6 +27,25 @@ export const useLogin = () => {
   });
 };
 
+// Custom hook for Google Login
+export const useGoogleLogin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (idToken: string) => ApiService.loginWithGoogle(idToken),
+    onSuccess: (response) => {
+      if (response.success && response.data) {
+        // Update user cache
+        queryClient.setQueryData(AUTH_QUERY_KEYS.user, response.data.user);
+        queryClient.setQueryData(AUTH_QUERY_KEYS.profile, response.data.user);
+      }
+    },
+    onError: (error: any) => {
+      console.error('Google Login error:', error);
+    },
+  });
+};
+
 // Custom hook for OTP verification
 export const useVerifyOTP = () => {
   const queryClient = useQueryClient();

@@ -31,7 +31,29 @@ if (!GoogleSignin) {
         },
         signIn: async () => {
             console.log('GoogleSignin.signIn mock called');
-            throw new Error('Google Sign-In is not available in Expo Go. Please stick to development build.');
+            // Mock success response for Development
+            return {
+                data: {
+                    idToken: 'mock-google-id-token-dev',
+                    user: {
+                        id: 'mock-user-id',
+                        name: 'Test User',
+                        email: 'test.user@example.com',
+                        photo: 'https://via.placeholder.com/150',
+                        familyName: 'User',
+                        givenName: 'Test',
+                    },
+                },
+                idToken: 'mock-google-id-token-dev',
+                user: {
+                    id: 'mock-user-id',
+                    name: 'Test User',
+                    email: 'test.user@example.com',
+                    photo: 'https://via.placeholder.com/150',
+                    familyName: 'User',
+                    givenName: 'Test',
+                }
+            };
         },
         signOut: async () => { },
         isSignedIn: async () => false,

@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import { useLogin } from '../../hooks/useAuth';
+import { useLogin, useGoogleLogin } from '../../hooks/useAuth';
 import Colors from '../../constants/Colors';
 import { GoogleSignin, statusCodes } from '../../utils/googleSigninSafe';
 import { Mail, Phone, ArrowRight } from 'lucide-react-native';
@@ -29,6 +29,7 @@ const LoginScreen: React.FC = () => {
   const theme = Colors[colorScheme ?? 'light'];
 
   const loginMutation = useLogin();
+  const googleLoginMutation = useGoogleLogin();
 
   React.useEffect(() => {
     try {
@@ -69,14 +70,21 @@ const LoginScreen: React.FC = () => {
 
       if (userInfo.idToken) {
         // Send idToken to backend for verification and login
-        Toast.show({
-          type: 'success',
-          text1: 'Google Login Success',
-          text2: `Welcome ${userInfo.user.name}!`,
-        });
+        // Send idToken to backend for verification and login
+        const response = await googleLoginMutation.mutateAsync(userInfo.idToken);
 
-        // TODO: Call backend API with userInfo.idToken
-        // const response = await loginMutation.mutateAsync({ googleToken: userInfo.idToken });
+        if (response.success) {
+          Toast.show({
+            type: 'success',
+            text1: 'Google Login Success',
+            text2: `Welcome ${userInfo.user.name}!`,
+          });
+
+          // Navigate to Home or wherever
+          router.replace('/(tabs)/home');
+        } else {
+          throw new Error(response.message || 'Login failed');
+        }
       } else {
         throw new Error('No ID token present');
       }
@@ -147,17 +155,18 @@ const LoginScreen: React.FC = () => {
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: theme.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
     >
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        bounces={false}
       >
         <View style={styles.contentWrapper}>
           <View style={styles.header}>
             <View style={[styles.logoContainer, { shadowColor: theme.tint }]}>
-              {/* Using a require statement with default source if possible, or just assume the file exists */}
               <Image
                 source={require('../../assets/images/reveda_logo.png')}
                 style={styles.logo}
@@ -209,20 +218,27 @@ const LoginScreen: React.FC = () => {
               )}
             </TouchableOpacity>
 
+            <View style={styles.dividerContainer}>
+              <View style={[styles.dividerLine, { backgroundColor: theme.borderColor }]} />
+              <Text style={[styles.dividerText, { color: theme.textSecondary }]}>OR</Text>
+              <View style={[styles.dividerLine, { backgroundColor: theme.borderColor }]} />
+            </View>
+
             {/* Google Login Button */}
             <TouchableOpacity
               style={[
                 styles.googleButton,
-                { backgroundColor: theme.cardBackground, shadowColor: '#000' }
+                { backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }
               ]}
               onPress={handleGoogleLogin}
+              activeOpacity={0.8}
             >
               <View style={styles.buttonContent}>
                 <Image
                   source={{ uri: 'https://cdn-icons-png.flaticon.com/512/300/300221.png' }}
                   style={styles.googleIcon}
                 />
-                <Text style={[styles.googleButtonText, { color: theme.text }]}>Continue with Google</Text>
+                <Text style={[styles.googleButtonText, { color: '#374151' }]}>Continue with Google</Text>
               </View>
             </TouchableOpacity>
 
@@ -232,6 +248,15 @@ const LoginScreen: React.FC = () => {
             >
               <Text style={[styles.linkText, { color: theme.textSecondary }]}>
                 Don't have an account? <Text style={[styles.linkTextBold, { color: theme.tint }]}>Sign Up</Text>
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => router.push('/doctor-recruitment')}
+              style={styles.doctorLinkButton}
+            >
+              <Text style={[styles.doctorLinkText, { color: theme.textSecondary }]}>
+                Are you a Doctor? <Text style={[styles.linkTextBold, { color: theme.tint }]}>Join ReVeda</Text>
               </Text>
             </TouchableOpacity>
           </View>
@@ -253,13 +278,12 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
     paddingHorizontal: 24,
-    paddingVertical: 10,
+    paddingVertical: 40,
   },
   contentWrapper: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: 20,
   },
   header: {
     alignItems: 'center',
@@ -357,8 +381,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
   },
+  doctorLinkButton: {
+    marginTop: 8,
+    alignItems: 'center',
+    padding: 8,
+  },
   linkText: {
     fontSize: 15,
+  },
+  doctorLinkText: {
+    fontSize: 14,
+    marginTop: 4,
   },
   linkTextBold: {
     fontWeight: '700',
@@ -373,31 +406,42 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     opacity: 0.7,
   },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 24,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+  },
+  dividerText: {
+    marginHorizontal: 16,
+    fontSize: 14,
+    fontWeight: '500',
+  },
   googleButton: {
     borderRadius: 14,
-    padding: 18,
+    padding: 16, // Slightly reduced padding to match standard
     alignItems: 'center',
-    marginTop: 16,
     borderWidth: 1,
-    borderColor: '#ddd', // Or theme.borderColor
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 2,
     elevation: 2,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 12, // Space between icon and text
   },
   googleIcon: {
     width: 24,
     height: 24,
+    marginRight: 12,
   },
   googleButtonText: {
     fontSize: 16,
     fontWeight: '600',
+    // Color handled inline or here, user liked previous which was specific
   },
 });
 

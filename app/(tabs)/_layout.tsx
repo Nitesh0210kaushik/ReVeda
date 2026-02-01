@@ -17,10 +17,13 @@ function TabIcon({ Icon, color, focused, name }: { Icon: any; color: string; foc
   );
 }
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
   const { mode } = useAppMode();
+  const insets = useSafeAreaInsets();
 
   return (
     <AuthGuard fallback={<Redirect href="/auth/login" />}>
@@ -31,8 +34,8 @@ export default function TabLayout() {
           tabBarStyle: {
             backgroundColor: theme.background,
             borderTopColor: theme.borderColor,
-            height: 60,
-            paddingBottom: 8,
+            height: 60 + insets.bottom,
+            paddingBottom: insets.bottom + 8,
             paddingTop: 8,
           },
           headerShown: false,

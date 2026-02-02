@@ -14,6 +14,12 @@ const API_CONFIG = {
   TIMEOUT: 10000,
 };
 
+console.log('🚀 API Config:', {
+  BASE_URL: API_CONFIG.BASE_URL,
+  IS_DEV: __DEV__,
+  PLATFORM: Platform.OS
+});
+
 // Storage Keys
 export const STORAGE_KEYS = {
   ACCESS_TOKEN: 'accessToken',

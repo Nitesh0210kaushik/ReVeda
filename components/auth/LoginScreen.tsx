@@ -89,19 +89,27 @@ const LoginScreen: React.FC = () => {
         throw new Error('No ID token present');
       }
     } catch (error: any) {
+      console.error('Google Sign-In Error:', error);
+
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
         Toast.show({
           type: 'error',
           text1: 'Google Login Error',
           text2: 'Google Play Services are not available',
         });
+      } else if (error.code === '10' || error.code === 'DEVELOPER_ERROR') {
+        // This is the most common error for missing SHA-1
+        Toast.show({
+          type: 'error',
+          text1: 'Configuration Error',
+          text2: 'SHA-1 Mismatch. Check Firebase Console.',
+          visibilityTime: 6000,
+        });
       } else {
-        // some other error happened
         Toast.show({
           type: 'error',
           text1: 'Google Login Failed',

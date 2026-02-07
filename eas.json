@@ -13,9 +13,22 @@
       "android": {
         "buildType": "apk"
       },
-      "node": "20.18.0"
+      "node": "20.18.0",
+      "env": {
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "995604075518-n90k98gd76ahf7dsp429vf0l7putvh7e.apps.googleusercontent.com",
+        "EXPO_PUBLIC_API_URL": "https://reveda-backend.onrender.com"
+      }
     },
     "production": {
+      "distribution": "store",
+      "android": {
+        "buildType": "apk"
+      },
+      "node": "20.18.0",
+      "env": {
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "995604075518-n90k98gd76ahf7dsp429vf0l7putvh7e.apps.googleusercontent.com",
+        "EXPO_PUBLIC_API_URL": "https://reveda-backend.onrender.com"
+      },
       "autoIncrement": true
     }
   },

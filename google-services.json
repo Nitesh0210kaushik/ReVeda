@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "28559316578",
+    "project_id": "reveda-8a8d0",
+    "storage_bucket": "reveda-8a8d0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28559316578:android:94512da39ae458d031233b",
+        "android_client_info": {
+          "package_name": "com.reveda.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28559316578-2i6afr00mss6nhfs3he0g08hmhae4jhr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reveda.app",
+            "certificate_hash": "4bf7032b2327dc61e4627afa4fd53777905d63a6"
+          }
+        },
+        {
+          "client_id": "28559316578-n34l56es9o5h8ism63h75eo9db9irc92.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reveda.app",
+            "certificate_hash": "23115a3b7cae1e73c2b0643ab345a54c77455f41"
+          }
+        },
+        {
+          "client_id": "28559316578-debug_placeholder.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reveda.app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "28559316578-c8bngan4gj73cnlfv1m0069spaoprqa2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoIgsRR4Y_EEs7YZEcHypi5eGprCA3tHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "28559316578-c8bngan4gj73cnlfv1m0069spaoprqa2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

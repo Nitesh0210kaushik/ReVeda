@@ -38,3 +38,9 @@ npm-debug.log*
 
 # Secrets
 google-services.json
+
+# Keystore files (NEVER commit!)
+*.keystore
+*.jks
+keystore.properties
+@nitesh2kaushik__reveda.jks

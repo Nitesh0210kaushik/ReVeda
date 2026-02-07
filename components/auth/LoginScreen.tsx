@@ -33,11 +33,15 @@ const LoginScreen: React.FC = () => {
 
   React.useEffect(() => {
     try {
+      console.log('--- Google Login Debug ---');
+      console.log('Web Client ID:', process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID);
+      console.log('Configuring GoogleSignin...');
       GoogleSignin.configure({
         webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
         offlineAccess: true,
         scopes: ['profile', 'email'],
       });
+      console.log('GoogleSignin configured successfully');
     } catch (e) {
       // Ignore error likely due to running in Expo Go
       console.log('GoogleSignin configure failed (expected in Expo Go):', e);

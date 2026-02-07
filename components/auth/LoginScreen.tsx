@@ -14,9 +14,9 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import { useLogin, useGoogleLogin } from '../../hooks/useAuth';
+import { useLogin/*, useGoogleLogin*/ } from '../../hooks/useAuth';
 import Colors from '../../constants/Colors';
-import { GoogleSignin, statusCodes } from '../../utils/googleSigninSafe';
+// import { GoogleSignin, statusCodes } from '../../utils/googleSigninSafe';
 import { Mail, Phone, ArrowRight } from 'lucide-react-native';
 
 // Configure Google Sign-In moved inside component to prevent Expo Go crashes
@@ -29,8 +29,9 @@ const LoginScreen: React.FC = () => {
   const theme = Colors[colorScheme ?? 'light'];
 
   const loginMutation = useLogin();
-  const googleLoginMutation = useGoogleLogin();
+  // const googleLoginMutation = useGoogleLogin();
 
+  /*
   React.useEffect(() => {
     try {
       console.log('--- Google Login Debug ---');
@@ -47,6 +48,7 @@ const LoginScreen: React.FC = () => {
       console.log('GoogleSignin configure failed (expected in Expo Go):', e);
     }
   }, []);
+  */
 
   const validateInput = (): boolean => {
     if (!identifier.trim()) {
@@ -67,6 +69,7 @@ const LoginScreen: React.FC = () => {
     return true;
   };
 
+  /*
   const handleGoogleLogin = async () => {
     try {
       await GoogleSignin.hasPlayServices();
@@ -122,6 +125,7 @@ const LoginScreen: React.FC = () => {
       }
     }
   };
+  */
 
   // Previous handleLogin continues below...
   const handleLogin = async () => {
@@ -236,7 +240,8 @@ const LoginScreen: React.FC = () => {
               <View style={[styles.dividerLine, { backgroundColor: theme.borderColor }]} />
             </View>
 
-            {/* Google Login Button */}
+            {/* Google Login Button (Disabled) */}
+            {/*
             <TouchableOpacity
               style={[
                 styles.googleButton,
@@ -253,6 +258,7 @@ const LoginScreen: React.FC = () => {
                 <Text style={[styles.googleButtonText, { color: '#374151' }]}>Continue with Google</Text>
               </View>
             </TouchableOpacity>
+            */}
 
             <TouchableOpacity
               onPress={() => router.push('/auth/signup')}

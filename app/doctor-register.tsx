@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, Platform, Image, ActivityIndicator } from 'react-native';
 import { CheckCircle, Briefcase, DollarSign, Clock, User, Phone, Mail, ChevronRight, FileText, Upload, Camera, ChevronDown, ArrowLeft } from 'lucide-react-native';
 import Colors from '../constants/Colors';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-
-declare const __DEV__: boolean;
+import { API_URL } from '../constants/Config';
 
 // Helper for web-friendly alerts
 const showAlert = (title: string, message: string) => {
@@ -66,25 +64,7 @@ export default function DoctorRegisterScreen() {
 
         setLoading(true);
         try {
-            let API_BASE = 'https://reveda-backend.onrender.com'; // Default to Production
-
-            if (__DEV__) {
-                if (Platform.OS === 'android') {
-                    API_BASE = 'http://10.0.2.2:5000';
-                } else if (Platform.OS === 'web' && typeof window !== 'undefined') {
-                    const hostname = window.location.hostname;
-                    API_BASE = `http://${hostname}:5000`;
-                } else {
-                    API_BASE = 'http://localhost:5000';
-                }
-            }
-
-            // Prefer env var if set
-            if (process.env.EXPO_PUBLIC_API_URL) {
-                API_BASE = process.env.EXPO_PUBLIC_API_URL;
-            }
-
-            const API_URL = `${API_BASE}/api/v1/doctors/register`;
+            const ENDPOINT_URL = `${API_URL}/api/v1/doctors/register`;
 
             const data = new FormData();
             data.append('firstName', formData.firstName);
@@ -116,7 +96,7 @@ export default function DoctorRegisterScreen() {
                 });
             });
 
-            const response = await fetch(API_URL, {
+            const response = await fetch(ENDPOINT_URL, {
                 method: 'POST',
                 headers: {
                     // Content-Type must be undefined so browser sets boundary

@@ -8,8 +8,7 @@ import { LogOut } from 'lucide-react-native';
 import { useLogout } from '../../hooks/useAuth';
 import Toast from 'react-native-toast-message';
 
-// Backend URL
-const API_URL = 'http://localhost:5000';
+import { API_URL, getImageUrl } from '../../constants/Config';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
@@ -55,9 +54,7 @@ export default function SettingsScreen() {
   const appSettings = ['Notifications', 'Storage and Data', 'App Language', 'Help'];
 
   // Construct full image URL
-  const profileImageUrl = user?.profilePicture
-    ? `${API_URL}/${user.profilePicture.replace(/\\/g, '/')}`
-    : null;
+  const profileImageUrl = getImageUrl(user?.profilePicture);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>

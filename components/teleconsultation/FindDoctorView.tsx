@@ -19,6 +19,7 @@ interface Doctor {
 }
 
 import { useDoctors } from '../../hooks/useApi';
+import { getImageUrl } from '../../constants/Config';
 
 export default function FindDoctorView({ theme }: FindDoctorViewProps) {
     // Using React Query hook for data fetching
@@ -51,7 +52,7 @@ export default function FindDoctorView({ theme }: FindDoctorViewProps) {
             ) : doctors.map((doctor) => (
                 <View key={doctor._id} style={[styles.card, { backgroundColor: theme.cardBackground }]}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Image source={{ uri: doctor.image || 'https://i.pravatar.cc/100?img=11' }} style={styles.image} />
+                        <Image source={{ uri: getImageUrl(doctor.image) || 'https://i.pravatar.cc/100?img=11' }} style={styles.image} />
                         <View style={{ flex: 1, marginLeft: 16 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <View>

@@ -1,30 +1,13 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from '../constants/Config';
 
 // API Configuration
 declare const __DEV__: boolean;
 
-const getBaseURL = () => {
-  // Check for environment variable first
-  const envApiUrl = process.env.EXPO_PUBLIC_API_URL;
-  
-  if (envApiUrl) {
-    return `${envApiUrl}/api/v1`;
-  }
-  
-  // Fallback to default URLs
-  if (__DEV__) {
-    return Platform.OS === 'android'
-      ? 'http://10.0.2.2:5000/api/v1' // For Android Emulator
-      : 'http://localhost:5000/api/v1'; // For iOS Simulator and Web
-  }
-  
-  return 'https://reveda-backend.onrender.com/api/v1';
-};
-
 const API_CONFIG = {
-  BASE_URL: getBaseURL(),
+  BASE_URL: API_URL,
   TIMEOUT: 10000,
 };
 

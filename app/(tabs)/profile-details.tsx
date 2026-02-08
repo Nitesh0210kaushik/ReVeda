@@ -8,9 +8,7 @@ import Toast from 'react-native-toast-message';
 import Colors from '../../constants/Colors';
 import { useAuthContext } from '../../context/AuthContext';
 import { useUploadProfilePicture } from '../../hooks/useAuth';
-
-// Backend URL for images - assuming backend runs on port 5000
-const API_URL = 'http://localhost:5000'; // Make sure this matches your API config
+import { API_URL, getImageUrl } from '../../constants/Config';
 
 export default function ProfileDetailsScreen() {
     const colorScheme = useColorScheme();
@@ -94,12 +92,7 @@ export default function ProfileDetailsScreen() {
     }
 
     // Construct full image URL
-    // If running on device/emulator, using localhost might fail. Use IP if needed.
-    // For now assuming localhost works with port forwarding or web.
-    // Replace 'backslashes' with 'forwardslashes' just in case Windows paths mess up.
-    const profileImageUrl = user?.profilePicture
-        ? `${API_URL}/${user.profilePicture.replace(/\\/g, '/')}`
-        : null;
+    const profileImageUrl = getImageUrl(user?.profilePicture);
 
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}>

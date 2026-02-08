@@ -7,7 +7,7 @@ import { API_URL } from '../constants/Config';
 declare const __DEV__: boolean;
 
 const API_CONFIG = {
-  BASE_URL: API_URL,
+  BASE_URL: `${API_URL}/api/v1`,
   TIMEOUT: 10000,
 };
 

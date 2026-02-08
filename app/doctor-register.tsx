@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, Platform, Image, ActivityIndicator } from 'react-native';
-import { CheckCircle, Briefcase, DollarSign, Clock, User, Phone, Mail, ChevronRight, FileText, Upload, Camera, ChevronDown } from 'lucide-react-native';
+import { CheckCircle, Briefcase, DollarSign, Clock, User, Phone, Mail, ChevronRight, FileText, Upload, Camera, ChevronDown, ArrowLeft } from 'lucide-react-native';
 import Colors from '../constants/Colors';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+
+declare const __DEV__: boolean;
 
 // Helper for web-friendly alerts
 const showAlert = (title: string, message: string) => {
@@ -64,12 +66,22 @@ export default function DoctorRegisterScreen() {
 
         setLoading(true);
         try {
-            let API_BASE = 'http://localhost:5000';
-            if (Platform.OS === 'web' && typeof window !== 'undefined') {
-                const hostname = window.location.hostname;
-                API_BASE = `http://${hostname}:5000`;
-            } else if (Platform.OS === 'android') {
-                API_BASE = 'http://10.0.2.2:5000';
+            let API_BASE = 'https://reveda-backend.onrender.com'; // Default to Production
+
+            if (__DEV__) {
+                if (Platform.OS === 'android') {
+                    API_BASE = 'http://10.0.2.2:5000';
+                } else if (Platform.OS === 'web' && typeof window !== 'undefined') {
+                    const hostname = window.location.hostname;
+                    API_BASE = `http://${hostname}:5000`;
+                } else {
+                    API_BASE = 'http://localhost:5000';
+                }
+            }
+
+            // Prefer env var if set
+            if (process.env.EXPO_PUBLIC_API_URL) {
+                API_BASE = process.env.EXPO_PUBLIC_API_URL;
             }
 
             const API_URL = `${API_BASE}/api/v1/doctors/register`;
@@ -148,6 +160,9 @@ export default function DoctorRegisterScreen() {
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
                 <View style={styles.header}>
+                    <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+                        <ArrowLeft size={28} color="#333" />
+                    </TouchableOpacity>
                     <View style={styles.logoContainer}>
                         <Image source={require('../assets/icon.png')} style={styles.logoImage} resizeMode="contain" />
                     </View>
@@ -389,6 +404,7 @@ const styles = StyleSheet.create({
     mainContainer: { flex: 1, backgroundColor: '#F8F9FA' },
     scrollContent: { flexGrow: 1, alignItems: 'center', paddingVertical: 40, paddingHorizontal: 20 },
     header: { width: '100%', maxWidth: 480, marginBottom: 30, alignItems: 'center' },
+    backButton: { alignSelf: 'flex-start', marginBottom: 10, padding: 5 },
     logoContainer: {
         width: 80,
         height: 80,

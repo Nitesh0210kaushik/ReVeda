@@ -25,11 +25,12 @@ const VerifyOTPScreen: React.FC = () => {
   const [error, setError] = useState('');
 
   const inputRefs = useRef<(TextInput | null)[]>([]);
-  const { refreshAuth } = useAuthContext();
+  const { refreshAuth, isAuthenticated } = useAuthContext();
 
   const verifyOTPMutation = useVerifyOTP();
   const resendOTPMutation = useResendOTP();
 
+  // Timer effect
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer((prev) => {
@@ -43,6 +44,13 @@ const VerifyOTPScreen: React.FC = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Redirect to tabs when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/(tabs)');
+    }
+  }, [isAuthenticated]);
 
   const handleOTPChange = (value: string, index: number) => {
     if (!/^\d*$/.test(value)) return; // Only allow digits
@@ -84,7 +92,8 @@ const VerifyOTPScreen: React.FC = () => {
       });
 
       if (response.success) {
-        refreshAuth(); // Refresh auth context
+        // Refresh auth context - this will trigger the useEffect above once completed
+        refreshAuth();
 
         Toast.show({
           type: 'success',
@@ -92,7 +101,7 @@ const VerifyOTPScreen: React.FC = () => {
           text2: 'Verification Successful',
         });
 
-        router.replace('/(tabs)');
+        // Navigation is handled by useEffect on isAuthenticated change
       } else {
         setError(response.message || 'Invalid OTP');
         setOtp(['', '', '', '', '', '']);
@@ -181,7 +190,7 @@ const VerifyOTPScreen: React.FC = () => {
             {otp.map((digit, index) => (
               <TextInput
                 key={index}
-                ref={(ref) => (inputRefs.current[index] = ref)}
+                ref={(ref) => { inputRefs.current[index] = ref; }}
                 style={[
                   styles.otpInput,
                   digit ? styles.otpInputFilled : null,

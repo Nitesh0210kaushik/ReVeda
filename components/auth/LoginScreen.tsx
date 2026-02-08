@@ -270,7 +270,7 @@ const LoginScreen: React.FC = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push('/doctor-recruitment')}
+              onPress={() => router.push('/doctor-register')}
               style={styles.doctorLinkButton}
             >
               <Text style={[styles.doctorLinkText, { color: theme.textSecondary }]}>

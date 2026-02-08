@@ -62,6 +62,8 @@ export default function RootLayout() {
                 <Stack.Screen name="auth/login" />
                 <Stack.Screen name="auth/signup" />
                 <Stack.Screen name="auth/verify-otp" />
+                <Stack.Screen name="doctor-recruitment" options={{ presentation: 'modal', headerShown: false }} />
+                <Stack.Screen name="doctor-register" options={{ headerShown: false }} />
                 <Stack.Screen name="(tabs)" />
               </Stack>
               <Toast />

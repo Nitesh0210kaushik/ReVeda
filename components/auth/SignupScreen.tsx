@@ -249,6 +249,8 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     alignSelf: 'center',
     paddingBottom: 20,
+    flex: 1, // Ensure it takes full height
+    justifyContent: 'center', // Vertically center content
   },
   header: {
     alignItems: 'center',

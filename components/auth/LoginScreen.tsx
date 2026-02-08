@@ -302,6 +302,7 @@ const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
     paddingTop: 20,
+    justifyContent: 'center', // Added to vertically center the content
   },
   header: {
     alignItems: 'center',

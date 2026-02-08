@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, Platform, Image, ActivityIndicator } from 'react-native';
 import { CheckCircle, Briefcase, DollarSign, Clock, User, Phone, Mail, ChevronRight, FileText, Upload, Camera, ChevronDown, ArrowLeft } from 'lucide-react-native';
 import Colors from '../constants/Colors';

@@ -25,7 +25,7 @@ const VerifyOTPScreen: React.FC = () => {
   const [error, setError] = useState('');
 
   const inputRefs = useRef<(TextInput | null)[]>([]);
-  const { refreshAuth, isAuthenticated } = useAuthContext();
+  const { refreshAuth, isAuthenticated, user, refetchUser } = useAuthContext();
 
   const verifyOTPMutation = useVerifyOTP();
   const resendOTPMutation = useResendOTP();
@@ -45,12 +45,18 @@ const VerifyOTPScreen: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Redirect to tabs when authenticated
+  // Redirect handled in handleVerifyOTP
+  /*
   useEffect(() => {
-    if (isAuthenticated) {
-      router.replace('/(tabs)');
+    if (isAuthenticated && user) {
+      if (user.role === 'Admin') {
+        router.replace('/admin/dashboard');
+      } else {
+        router.replace('/(tabs)');
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
+  */
 
   const handleOTPChange = (value: string, index: number) => {
     if (!/^\d*$/.test(value)) return; // Only allow digits
@@ -92,8 +98,12 @@ const VerifyOTPScreen: React.FC = () => {
       });
 
       if (response.success) {
-        // Refresh auth context - this will trigger the useEffect above once completed
-        refreshAuth();
+        // Refresh auth context
+        await refreshAuth();
+
+        // Explicitly fetch user to ensure we have latest role
+        const userResult = await refetchUser();
+        const currentUser = userResult.data;
 
         Toast.show({
           type: 'success',
@@ -101,7 +111,12 @@ const VerifyOTPScreen: React.FC = () => {
           text2: 'Verification Successful',
         });
 
-        // Navigation is handled by useEffect on isAuthenticated change
+        // Direct navigation based on fetched user role
+        if (currentUser?.role === 'Admin') {
+          router.replace('/admin/dashboard');
+        } else {
+          router.replace('/(tabs)');
+        }
       } else {
         setError(response.message || 'Invalid OTP');
         setOtp(['', '', '', '', '', '']);
